@@ -7,6 +7,7 @@ exports = module.exports = consolidate;
 var fs = require('fs');
 
 
+
 var readCache = {};
 
 /**
@@ -113,7 +114,7 @@ exports.less.render = function (str, options, fn) {
  *  - filename: is required for @import directives and useful for error reporting
  *  - compress: defaults to false, minifies the output if true.
  */
-exports.stylus = fromStringRenderer('stylus');
+exports.styl = exports.stylus = fromStringRenderer('stylus');
 exports.stylus.render = function (str, options, fn) {
     var engine = require.stylus || (require.stylus = require('stylus'));
     engine.render(str, options || {}, fn);
