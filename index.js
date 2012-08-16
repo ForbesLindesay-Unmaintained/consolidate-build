@@ -60,6 +60,7 @@ function read(path, options, fn) {
   // read
   fs.readFile(path, 'utf8', function(err, str){
     if (err) return fn(err);
+    str = str.replace(/\r\n/g, '\n');
     if (options.cache) readCache[path] = str;
     fn(null, str);
   });
@@ -93,7 +94,7 @@ function fromStringRenderer(name) {
 exports.less = fromStringRenderer('less');
 exports.less.render = function (str, options, fn) {
     var engine = requires.less || (requires.less = require('less'));
-    var parser = new(less.Parser)(options || {});
+    var parser = new(engine.Parser)(options || {});
     parser.parse(str, function (e, tree) {
         if (e) return fn(e);
         var res;
@@ -123,15 +124,14 @@ exports.sass.render = function (str, options, fn) {
     var engine = require.sass || (require.sass = require('sass'));
     var res;
     try {
-        res = sass.render(str);
+        res = engine.render(str);
     } catch (ex) {
         return fn(ex);
     }
     fn(null, res);
 };
 
-exports.markdown = fromStringRenderer('md');
-exports.md = fromStringRenderer('md');
+exports.markdown = exports.md = fromStringRenderer('md');
 exports.md.render = function (str, options, fn) {
     var engine = require.markdown;
 
@@ -173,16 +173,18 @@ exports.md.render = function (str, options, fn) {
 
     var res;
     try {
-        res = md(str, options);
+        res = engine(str, options);
     } catch (ex) {
         return fn(ex);
     }
     fn(null, res);
 };
 
-
-exports['coffee-script'] = exports.coffeescript = fromStringRenderer('coffeescript');
-exports.coffeescript.render = function (str, options, fn) {
+var i = 0;
+var names = ['foo', 'bar', 'bash', 'bosh', 'bish'];
+exports.coffee = exports['coffee-script'] = exports.coffeescript = fromStringRenderer('coffee');
+exports.coffee.render = function (str, options, fn) {
+    options.filename = names[i++];
     var engine = require.coffeescript || (require.coffeescript = require('coffee-script'));
     var res;
     try {
@@ -190,5 +192,5 @@ exports.coffeescript.render = function (str, options, fn) {
     } catch (ex) {
         return fn(ex);
     }
-    fn(null, ex);
+    fn(null, res);
 };
