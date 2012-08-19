@@ -91,6 +91,10 @@ function longCompare(actual, expected) {
       return str;
     }
   }
+  console.log('Long Compare');
+  console.log('============');
+  console.log('');
+  console.log('actual = expected');
   for (var i = 0; i < actual.length || i < expected.length; i++) {
     if (actual.charAt(i) !== expected.charAt(i)) {
       console.log(format(actual.charAt(i)) + '!=' + format(expected.charAt(i)));

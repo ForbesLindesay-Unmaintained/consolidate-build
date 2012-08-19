@@ -1,3 +1,4 @@
+[![Build Status](https://secure.travis-ci.org/ForbesLindesay/consolidate-build.png?branch=master)](http://travis-ci.org/ForbesLindesay/consolidate-build)
 consolidate-build
 =================
 

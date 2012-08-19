@@ -174,17 +174,17 @@ exports.md.render = function (str, options, fn) {
   fn(null, res);
 };
 
-var i = 0;
-var names = ['foo', 'bar', 'bash', 'bosh', 'bish'];
 exports.coffee = exports['coffee-script'] = exports.coffeescript = fromStringRenderer('coffee');
 exports.coffee.render = function (str, options, fn) {
-  options.filename = names[i++];
+  if (typeof options.bare === 'undefined') {
+      options.bare = true;
+  }
   var engine = require.coffeescript || (require.coffeescript = require('coffee-script'));
   var res;
   try {
-    res = engine.compile(str, options);
+      res = engine.compile(str, {bare: false});
   } catch (ex) {
-    return fn(ex);
+      return fn(ex);
   }
   fn(null, res);
 };
