@@ -27,10 +27,12 @@ var requires = {};
  *
  * @api public
  */
-
-exports.clearCache = function(){
-  cacheStore = {};
-};
+(function () {
+  var oldClearCache = consolidate.clearCache;
+  exports.clearCache = function(){
+    cacheStore = {};
+  };
+}());
 
 function cache(options, compiled) {
   if (compiled && options.filename && options.cache) {
@@ -116,82 +118,73 @@ exports.less.render = function (str, options, fn) {
  */
 exports.styl = exports.stylus = fromStringRenderer('stylus');
 exports.stylus.render = function (str, options, fn) {
-    var engine = require.stylus || (require.stylus = require('stylus'));
-    engine.render(str, options || {}, fn);
+  var engine = require.stylus || (require.stylus = require('stylus'));
+  engine.render(str, options || {}, fn);
 };
 
 exports.sass = fromStringRenderer('sass');
 exports.sass.render = function (str, options, fn) {
-    var engine = require.sass || (require.sass = require('sass'));
-    var res;
-    try {
-        res = engine.render(str);
-    } catch (ex) {
-        return fn(ex);
-    }
-    fn(null, res);
+  var engine = require.sass || (require.sass = require('sass'));
+  var res;
+  try {
+    res = engine.render(str);
+  } catch (ex) {
+    return fn(ex);
+  }
+  fn(null, res);
 };
 
 exports.markdown = exports.md = fromStringRenderer('md');
 exports.md.render = function (str, options, fn) {
-    var engine = require.markdown;
+  var engine = require.markdown;
 
-    // support markdown / discount
-    if (!engine) {
-        var md;
-        try {
-            md = require('marked');
-            engine = function (str, options) {
-                return md.parse(str, options || {});
-            };
-        } catch (err){
-            try {
-                md = require('discount');
-                engine = function (str, options) {
-                    return md.parse(str);
-                };
-            } catch (err) {
-                try {
-                    md = require('markdown-js');
-                    engine = function (str, options) {
-                        return md.parse(str);
-                    };
-                } catch (err) {
-                    try {
-                        md = require('markdown');
-                        engine = function (str, options) {
-                            return md.parse(str);
-                        };
-                    } catch (err) {
-                        throw new
-                          Error('Cannot find markdown library, install markdown, discount, or marked.');
-                    }
-                }
-            }
-        }
-        require.markdown = engine;
-    }
-
-    var res;
+  function load(name, engine) {
     try {
-        res = engine(str, options);
+      var md = require(name);
     } catch (ex) {
-        return fn(ex);
+      return undefined;
     }
-    fn(null, res);
+    return function (str, options) {
+      return engine.call(md, str, options);
+    };
+  }
+  
+  engine = engine || load('marked', function (str, options) {
+    return this.parse(str, options || {});
+  });
+  engine = engine || load('discount', function (str, options) {
+    return this.parse(str);
+  });
+  engine = engine || load('markdown-js', function (str, options) {
+    return this.parse(str);
+  });
+  engine = engine || load('markdown', function (str, options) {
+    return this.parse(str);
+  });
+  if (!engine) {
+    throw new Error('Cannot find markdown library, install markdown, discount, or marked.');
+  }
+
+  var res;
+  try {
+    res = engine(str, options);
+  } catch (ex) {
+    return fn(ex);
+  }
+  fn(null, res);
 };
 
 var i = 0;
 var names = ['foo', 'bar', 'bash', 'bosh', 'bish'];
 exports.coffee = exports['coffee-script'] = exports.coffeescript = fromStringRenderer('coffee');
 exports.coffee.render = function (str, options, fn) {
-    options.filename = names[i++];
-    var engine = require.coffeescript || (require.coffeescript = require('coffee-script'));
-    var res;
-    try {
-        res = engine.compile(str, options);
-    } catch (ex) {
-        return fn(ex);
-    }
-    fn(null, res);
+  options.filename = names[i++];
+  var engine = require.coffeescript || (require.coffeescript = require('coffee-script'));
+  var res;
+  try {
+    res = engine.compile(str, options);
+  } catch (ex) {
+    return fn(ex);
+  }
+  fn(null, res);
 };
