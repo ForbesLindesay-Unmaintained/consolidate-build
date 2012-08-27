@@ -63,7 +63,7 @@ build[name]('styles/style.css', function(err, css){
 All the languages support being built without a file being present.  To do this ismply use the render method.
 
 ```js
-build.less('.class { width: 1 + 1 }', { compress: true}, function(err, css){
+build.less.render('.class { width: 1 + 1 }', { compress: true}, function(err, css){
   if (err) throw err;
   console.log(css);
 });

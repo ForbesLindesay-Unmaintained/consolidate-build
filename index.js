@@ -3,6 +3,19 @@
  */
 
 var consolidate = require('consolidate');
+['jade', 'dust', 'swig', 'liquor', 'ejs',
+ 'eco', 'jazz', 'jqtpl', 'haml', 'whiskers',
+ 'haml-coffee', 'hogan', 'handlebars',
+ 'underscore', 'qejs', 'walrus', 'mustache',
+ 'dot', 'just'].forEach(function (engine) {
+  if (consolidate[engine] && 
+    typeof consolidate[engine].outExtension === 'undefined' &&
+    typeof consolidate[engine].inExtension === 'undefined') {
+    consolidate[engine].outExtension = 'html';
+    consolidate[engine].inExtension = engine;
+  }
+});
+
 exports = module.exports = consolidate;
 var fs = require('fs');
 
@@ -31,6 +44,7 @@ var requires = {};
   var oldClearCache = consolidate.clearCache;
   exports.clearCache = function(){
     cacheStore = {};
+    oldClearCache();
   };
 }());
 
@@ -109,6 +123,8 @@ exports.less.render = function (str, options, fn) {
         fn(null, res);
     });
 };
+exports.less.outExtension = 'css';
+exports.less.inExtension = 'less';
 
 /**
  * options:
@@ -121,6 +137,8 @@ exports.stylus.render = function (str, options, fn) {
   var engine = require.stylus || (require.stylus = require('stylus'));
   engine.render(str, options || {}, fn);
 };
+exports.stylus.outExtension = 'css';
+exports.stylus.inExtension = 'styl';
 
 exports.sass = fromStringRenderer('sass');
 exports.sass.render = function (str, options, fn) {
@@ -133,6 +151,8 @@ exports.sass.render = function (str, options, fn) {
   }
   fn(null, res);
 };
+exports.sass.outExtension = 'css';
+exports.sass.inExtension = 'sass';
 
 exports.markdown = exports.md = fromStringRenderer('md');
 exports.md.render = function (str, options, fn) {
@@ -173,6 +193,8 @@ exports.md.render = function (str, options, fn) {
   }
   fn(null, res);
 };
+exports.markdown.outExtension = 'html';
+exports.markdown.inExtension = 'md';
 
 exports.coffee = exports['coffee-script'] = exports.coffeescript = fromStringRenderer('coffee');
 exports.coffee.render = function (str, options, fn) {
@@ -188,3 +210,5 @@ exports.coffee.render = function (str, options, fn) {
   }
   fn(null, res);
 };
+exports.coffee.outExtension = 'js';
+exports.coffee.inExtension = 'coffee';
