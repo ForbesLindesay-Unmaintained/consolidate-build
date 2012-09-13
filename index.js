@@ -18,7 +18,7 @@ var consolidate = require('consolidate');
 
 exports = module.exports = consolidate;
 var fs = require('fs');
-
+var pa = require('path');
 
 
 var readCache = {};
@@ -111,7 +111,11 @@ function fromStringRenderer(name) {
 exports.less = fromStringRenderer('less');
 exports.less.render = function (str, options, fn) {
     var engine = requires.less || (requires.less = require('less'));
-    var parser = new(engine.Parser)(options || {});
+    options = options || {};
+    if (options.filename) {
+      options.paths = options.paths || [pa.dirname(options.filename)];
+    }
+    var parser = new(engine.Parser)(options);
     parser.parse(str, function (e, tree) {
         if (e) return fn(e);
         var res;
