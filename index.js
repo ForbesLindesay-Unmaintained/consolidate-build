@@ -101,6 +101,18 @@ function fromStringRenderer(name) {
   };
 }
 
+function clone(obj) {
+  if (typeof obj === 'object') {
+    var res = {};
+    Object.keys(obj).forEach(function (key) {
+      res[key] = clone(obj[key]);
+    });
+    return res;
+  } else {
+    return obj;
+  }
+}
+
 
 /**
  * options:
@@ -202,13 +214,12 @@ exports.markdown.inExtension = 'md';
 
 exports.coffee = exports['coffee-script'] = exports.coffeescript = fromStringRenderer('coffee');
 exports.coffee.render = function (str, options, fn) {
-  if (typeof options.bare === 'undefined') {
-      options.bare = true;
-  }
+  options = clone(options);
+  options.bare = options.bare || false;
   var engine = require.coffeescript || (require.coffeescript = require('coffee-script'));
   var res;
   try {
-      res = engine.compile(str, {bare: false});
+      res = engine.compile(str, options);
   } catch (ex) {
       return fn(ex);
   }
