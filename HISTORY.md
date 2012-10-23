@@ -1,7 +1,12 @@
+1.0.0
+-----
+
+ - Fix coffee-script so it passes options to compiler
+
 0.1.0
 -----
 
-Add `.inExtension` and `.outExtension` to all engines to better support systems that need to automatically support lots of languages.
+ - Add `.inExtension` and `.outExtension` to all engines to better support systems that need to automatically support lots of languages.
 
 0.0.0
 -----
