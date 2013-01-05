@@ -184,7 +184,9 @@ exports.md.render = function (str, options, fn) {
       return engine.call(md, str, options);
     };
   }
-  
+  engine = engine || load('supermarked', function (str, options) {
+    return this(str, options || {});
+  });
   engine = engine || load('marked', function (str, options) {
     return this.parse(str, options || {});
   });

@@ -1,6 +1,6 @@
 {
   "name": "consolidate-build",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Does for languages that can be 'built' what consolidate.js does for templates",
   "main": "index.js",
   "scripts": {
