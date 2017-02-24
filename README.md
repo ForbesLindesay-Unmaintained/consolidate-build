@@ -1,6 +1,8 @@
 
 # Deprecated, use [jstransformer](https://github.com/jstransformers/jstransformer)
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/ForbesLindesay/consolidate-build.svg)](https://greenkeeper.io/)
+
 
 [![Build Status](https://secure.travis-ci.org/ForbesLindesay/consolidate-build.png?branch=master)](http://travis-ci.org/ForbesLindesay/consolidate-build)
 consolidate-build
