@@ -23,7 +23,7 @@
     "consolidate": "0.X.X"
   },
   "devDependencies": {
-    "should": "*",
+    "should": "11.2.0",
     "mocha": "*",
     "less": "*",
     "stylus": "*",
