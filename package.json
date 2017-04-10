@@ -28,7 +28,7 @@
     "less": "*",
     "stylus": "*",
     "sass": "*",
-    "coffee-script": "*",
+    "coffee-script": ">=1.12.5",
     "marked": "*"
   }
 }
