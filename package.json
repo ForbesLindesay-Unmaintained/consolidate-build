@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "should": "*",
-    "mocha": "*",
+    "mocha": ">=3.4.1",
     "less": "*",
     "stylus": "*",
     "sass": "*",
