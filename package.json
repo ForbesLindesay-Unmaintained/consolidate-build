@@ -27,7 +27,7 @@
     "mocha": "*",
     "less": "*",
     "stylus": "*",
-    "sass": "*",
+    "sass": "0.4.3",
     "coffee-script": "*",
     "marked": "*"
   }
